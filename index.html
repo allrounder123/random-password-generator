@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel = "stylesheet" href = "style.css"/>
+</head>
+<body>
+    <h1>RANDOM PASSWORD GENERATOR</h1>
+    <div >
+        <label for = "number" > INPUT LENGTH </label>
+        <input type = "number" id = "len" placeholder="length"/>
+        <button class onclick = "make()"> GENERATE</button>
+        <p  id = "pass"> GENERATED PASSWORD: </p>
+        </div>
+
+    <script>
+        function make(){
+            let chars = "#$%^&*()_+=-/.,'[]{}\|!@><~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+            let p = "" ; 
+            for(let i = 0 ; i < len.value ; i++){
+                p += chars[Math.floor(Math.random()*chars.length)];
+            }
+            pass.innerText = "GENERATED PASSWORD: " + p ;
+
+        }
+    </script>
+</body>
+</html>
+
+
+
+----------------------------------------style.css----------------------------
+h1{
+   color: #3e92b3
+}
+
+
+
+-----------------------------------------------------
+
+
+
+<!-- 
+Why multiply by chars.length?
+Because Math.random() alone only gives a number between 0 and 1. If you used Math.floor(Math.random()), it would always be 0 (because 0 ≤ r < 1
+ and floor makes it 0), so you'd always pick chars[0].Multiplying by chars.length stretches the random number into the numeric range of valid
+  indices (0 up to but not including chars.length), so when you floor() you get a uniformly distributed integer index that maps to any character
+   in the string.
+
+Concrete numeric example
+
+chars = "ABCDE" → chars.length = 5 (valid indexes 0..4)
+
+If Math.random() returns 0.02 → 0.02 * 5 = 0.10 → Math.floor(0.10) = 0 → picks chars[0] === "A"
+
+If Math.random() returns 0.55 → 0.55 * 5 = 2.75 → Math.floor(2.75) = 2 → picks chars[2] === "C"
+
+If Math.random() returns 0.999 → 0.999 * 5 = 4.995 → Math.floor(4.995) = 4 → picks chars[4] === "E"
+
+Important notes & alternatives
+
+Using Math.floor(Math.random() * n) gives a uniform discrete distribution over integers 0..n-1 (assuming Math.random() is uniform).
+
+Do not use Math.round(Math.random() * (n-1)) — it introduces slight bias at the ends.
+
+For cryptographically secure passwords (real security), prefer crypto.getRandomValues() instead of Math.random(), because Math.random() is not
+ cryptographically secure.
+
+Short takeaway
+We multiply by chars.length so the random number covers the full range of valid string indices. Without multiplying, you’d always pick
+ the same character. Multiplying + flooring turns a 0..1 float into a valid index 0..chars.length-1. ✅ -->
